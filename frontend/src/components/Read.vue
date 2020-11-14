@@ -11,28 +11,30 @@
 			</div>
 			<div class="mb-3">
 				<label>내용</label>
-				<textarea class="form-control" rows="5" v-model="post.content" readonly></textarea>
+				<textarea class="form-control" rows="5" v-model="post.contents" readonly></textarea>
 			</div>
 			<div >
                 <router-link class="btn btn-primary" to="/board">목록</router-link>
-				<button class="btn btn-primary" @click="modifyPost(post.id)">수정</button>
-				<button class="btn btn-primary" @click="deletePost(post.id)">삭제</button>
+				<button class="btn btn-primary" @click="modifyPost(post.bid)">수정</button>
+				<button class="btn btn-primary" @click="deletePost(post.bid)">삭제</button>
 			</div>
 		</div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from 'axios';
+import { API_BASE_URL } from "@/config";
+
 export default {
    	name : 'Read',
 	methods : {
-	   modifyPost(id){
-		   this.$router.push('/update?id='+ id);
+	   modifyPost(bid){
+		   this.$router.push('/update?bid='+ bid);
 	   },
-	   deletePost(id){
-		   console.log(id);
+	   deletePost(bid){
+		   console.log(bid);
 		   axios
-				.delete(`http://localhost:8080/myboard/api/board/${id}`)
+				.delete(`${API_BASE_URL}/myboard/api/board/${bid}`)
 				.then((response)=>{
 					console.log(response);
 					this.$router.push('/board');
@@ -50,7 +52,7 @@ export default {
    created() {
 	   const params = new URL(document.location).searchParams;
 	   axios
-			.get(`http://localhost:8080/myboard/api/board/${params.get('id')}`)
+			.get(`${API_BASE_URL}/myboard/api/board/${params.get('bid')}`)
 			.then((response)=>{
 				console.log(response);
 				this.post = response.data;

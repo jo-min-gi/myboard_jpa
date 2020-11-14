@@ -11,7 +11,7 @@
             </div>
             <div class="mb-3">
                 <label>내용</label>
-                <textarea class="form-control" rows="5" v-model="post.content" placeholder="내용을 입력해 주세요" ></textarea>
+                <textarea class="form-control" rows="5" v-model="post.contents" placeholder="내용을 입력해 주세요" ></textarea>
             </div>
 			<div >
 				<button type="button" class="btn btn-primary" @click="modifyPost">수정</button>
@@ -22,12 +22,14 @@
 
 <script>
 import axios from 'axios'
+import { API_BASE_URL } from "@/config";
+
 export default {
    	name : 'Read',
 	methods : {
 	   modifyPost(){
            axios
-                .put(`http://localhost:8080/myboard/api/board/`, this.post)
+                .put(`${API_BASE_URL}/myboard/api/board`, this.post)
                 .then((response)=>{
                     console.log(response);
                     this.$router.push('/board');
@@ -45,7 +47,7 @@ export default {
    created() {
 	   const params = new URL(document.location).searchParams;
 	   axios
-			.get(`http://localhost:8080/myboard/api/board/${params.get('id')}`)
+			.get(`${API_BASE_URL}/myboard/api/board/${params.get('bid')}`)
 			.then((response)=>{
 				console.log(response);
 				this.post = response.data;

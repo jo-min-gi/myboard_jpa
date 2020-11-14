@@ -26,11 +26,11 @@ public class SwaggerConfig {
 	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("MyBoard API")
+		return new ApiInfoBuilder().title("MyBoard API for Jenkins")
 				.description("MyBoard API Reference for Developers")
 				.termsOfServiceUrl("https://edu.ssafy.com")
 				.license("SSAFY License")
-				.licenseUrl("ssafy@ssafy.com").version("2.0").build();
+				.licenseUrl("ssafy@ssafy.com").version("1.0").build();
 	}
 
 }

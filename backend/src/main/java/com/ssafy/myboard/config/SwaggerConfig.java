@@ -30,7 +30,7 @@ public class SwaggerConfig {
 				.description("MyBoard API Reference for Developers")
 				.termsOfServiceUrl("https://edu.ssafy.com")
 				.license("SSAFY License")
-				.licenseUrl("ssafy@ssafy.com").version("1.0").build();
+				.licenseUrl("ssafy@ssafy.com").version("2.0").build();
 	}
 
 }

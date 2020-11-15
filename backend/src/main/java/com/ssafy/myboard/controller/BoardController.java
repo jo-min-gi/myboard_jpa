@@ -36,7 +36,7 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 
-	@ApiOperation(value = "모든 게시글을 반환한다 for jenkins", response = List.class)
+	@ApiOperation(value = "모든 게시글을 반환한다 for jenkins2", response = List.class)
 	@GetMapping("")
 	public ResponseEntity<List<BoardDTO>> getAllPosts() throws Exception {
 		logger.debug("getAllPosts - 호출");

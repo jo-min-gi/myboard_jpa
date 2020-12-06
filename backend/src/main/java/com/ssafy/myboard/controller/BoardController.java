@@ -1,6 +1,11 @@
 package com.ssafy.myboard.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.List;
+import java.util.UUID;
+
+import javax.imageio.ImageIO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +24,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.stereotype.Controller;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.ssafy.myboard.dto.BoardDTO;
 import com.ssafy.myboard.service.BoardService;
 
@@ -50,6 +59,7 @@ public class BoardController {
 	public ResponseEntity<Integer> createPost(@RequestBody BoardDTO post) throws Exception {
 		System.out.println(post);
 		logger.debug("createPost - 호출");
+		createQR(post);
 		return new ResponseEntity<Integer>(boardService.createPost(post), HttpStatus.OK);
 	}
 
@@ -73,5 +83,19 @@ public class BoardController {
 		logger.debug("deleteOnePost - 호출");
 		return new ResponseEntity<Integer>(boardService.deleteOnePost(id), HttpStatus.OK);
 	}
+	
+	public void createQR(BoardDTO post) throws Exception {
+		System.out.println(post);
+		File path = new File("/myboard/qrcode/images/");
+		String fileName = UUID.randomUUID().toString().replace("-", "");
+		if(!path.exists()) path.mkdirs();
+
+		QRCodeWriter writer = new QRCodeWriter();
+		BitMatrix qrCode = writer.encode("http://localhost:8081/read?bid=6" + post.getBid(), BarcodeFormat.QR_CODE, 200, 200);
+		BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(qrCode);
+		ImageIO.write(qrImage, "PNG", new File(path, fileName+".png"));
+	}
+	
+	
 
 }

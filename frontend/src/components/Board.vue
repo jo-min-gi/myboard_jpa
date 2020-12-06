@@ -20,8 +20,7 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { API_BASE_URL } from "@/config";
+import { findAll } from "../api/board.js";
 
 export default {
   name: 'Board',
@@ -31,14 +30,15 @@ export default {
     }
   },
   created(){
-    axios
-      .get(API_BASE_URL + '/myboard/api/board')
-      .then((response) => {
+    findAll(
+      response => {
         this.posts = response.data;
-      })
-      .catch((error) => {
+      },
+      error => {
         console.log(error);
-      })   
+      }
+    )
+  
   }
 }
 </script>

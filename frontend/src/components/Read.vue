@@ -24,6 +24,8 @@
 <script>
 import axios from 'axios';
 import { API_BASE_URL } from "@/config";
+import { findById, deleteByBid } from "../api/board.js";
+
 
 export default {
    	name : 'Read',
@@ -32,16 +34,15 @@ export default {
 		   this.$router.push('/update?bid='+ bid);
 	   },
 	   deletePost(bid){
-		   console.log(bid);
-		   axios
-				.delete(`${API_BASE_URL}/myboard/api/board/${bid}`)
-				.then((response)=>{
-					console.log(response);
+		   	deleteByBid(
+				bid, 
+				response => {
 					this.$router.push('/board');
-				})
-				.catch((error)=>{
+				},
+				error => {
 					console.log(error);
-				})
+				}
+			)
 	   }
   	},
    data () {

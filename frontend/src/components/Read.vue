@@ -22,46 +22,35 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { API_BASE_URL } from "@/config";
-import { findById, deleteByBid } from "../api/board.js";
-
+import { findByBid, deleteByBid } from "../api/board.js";
 
 export default {
    	name : 'Read',
-	methods : {
+	data () {
+		return{
+			post : {}
+		}
+	},
+	created() {
+		const bid = this.$route.params.bid;
+		findByBid(
+			bid,
+			response => { this.post = response.data; },
+			error => { console.log(error); }
+		)
+	},
+   	methods : {
 	   modifyPost(bid){
-		   this.$router.push('/update?bid='+ bid);
+		   this.$router.push({ name : 'Update', params : { 'bid': bid } });
 	   },
 	   deletePost(bid){
 		   	deleteByBid(
 				bid, 
-				response => {
-					this.$router.push('/board');
-				},
-				error => {
-					console.log(error);
-				}
+				() => { this.$router.push('/board'); },
+				error => { console.log(error); }
 			)
 	   }
   	},
-   data () {
-	   return{
-		   post : {}
-	   }
-   },
-   created() {
-	   const params = new URL(document.location).searchParams;
-	   axios
-			.get(`${API_BASE_URL}/myboard/api/board/${params.get('bid')}`)
-			.then((response)=>{
-				console.log(response);
-				this.post = response.data;
-			})
-			.catch((error)=>{
-				console.log(error);
-			})
-   },
 
 }
 </script>

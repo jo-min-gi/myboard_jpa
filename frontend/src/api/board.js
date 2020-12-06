@@ -17,7 +17,7 @@ function findByBid(bid, success, fail){
 }
 
 function update(post, success, fail){
-    isntance
+    instance
         .put(`/api/board`, post)
         .then(success)
         .catch(fail)
@@ -25,8 +25,8 @@ function update(post, success, fail){
 
 function deleteByBid(bid, success, fail){
     instance
-        .delete(`${API_BASE_URL}/myboard/api/board/${bid}`)
-        .then(succcess)
+        .delete(`/api/board/${bid}`)
+        .then(success)
         .catch(fail)
 }
 

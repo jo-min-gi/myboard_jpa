@@ -21,8 +21,7 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { API_BASE_URL } from "@/config";
+import { save } from "../api/board.js";
 
 export default {
     name : 'Write',
@@ -40,16 +39,10 @@ export default {
                 writer : this.writer,
                 contents : this.contents
             };
-            console.log(post);
-            axios
-                .post(`${API_BASE_URL}/myboard/api/board`, post)
-                .then((response) => {
-                    console.log(response);
-                    this.$router.push('/board');
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
+            save(post,
+                () => { this.$router.push('/board'); },
+                error => { console.log(error) }
+            )
         }
     }
 }

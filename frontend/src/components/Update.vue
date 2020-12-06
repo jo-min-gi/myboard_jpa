@@ -21,23 +21,17 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { API_BASE_URL } from "@/config";
+import { update, findByBid } from "../api/board.js";
 
 export default {
    	name : 'Read',
 	methods : {
-	   modifyPost(){
-           axios
-                .put(`${API_BASE_URL}/myboard/api/board`, this.post)
-                .then((response)=>{
-                    console.log(response);
-                    this.$router.push('/board');
-                })
-                .catch((error)=>{
-                    console.log(error);
-                })
-       }
+	    modifyPost(){
+            update(this.post,
+                () => { this.$router.push('/board'); },
+                error => { console.log(error) }
+            )
+        },
     },
    data () {
 	   return{
@@ -45,16 +39,11 @@ export default {
 	   }
    },
    created() {
-	   const params = new URL(document.location).searchParams;
-	   axios
-			.get(`${API_BASE_URL}/myboard/api/board/${params.get('bid')}`)
-			.then((response)=>{
-				console.log(response);
-				this.post = response.data;
-			})
-			.catch((error)=>{
-				console.log(error);
-			})
+        const bid = this.$route.params.bid;
+        findByBid(bid, 
+            response => { this.post = response.data },
+            error => { console.log(error) }
+        )
    },
 
 }

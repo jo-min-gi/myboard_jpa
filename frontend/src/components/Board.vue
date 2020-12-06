@@ -11,7 +11,7 @@
             <tr v-for="(post) in posts" v-bind:key="post.bid">
                 <td>{{post.bid}}</td>
                 <td>{{post.writer}}</td>
-                <td><router-link :to="'/read?bid=' + post.bid">{{post.title}}</router-link></td>
+                <td><a href="#" @click="read(post.bid)">{{post.title}}</a></td>
                 <td>{{post.createdAt}}</td>
             </tr>
         </table>
@@ -38,7 +38,11 @@ export default {
         console.log(error);
       }
     )
-  
+  },
+  methods : {
+    read(bid) {
+      this.$router.push({name : 'Read', params : { 'bid' : bid }})
+    }
   }
 }
 </script>

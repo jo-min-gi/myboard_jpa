@@ -49,7 +49,6 @@ public class BoardController {
 	@GetMapping("")
 	public ResponseEntity<List<BoardDTO>> getAllPosts() throws Exception {
 		logger.debug("getAllPosts - 호출");
-		System.out.println(boardService.getAllPosts());
 		return new ResponseEntity<List<BoardDTO>>(boardService.getAllPosts(), HttpStatus.OK);
 	}
 	
@@ -57,9 +56,7 @@ public class BoardController {
 	@ApiOperation(value = "하나의 게시글을 작성한다.", response = Integer.class)
 	@PostMapping("")
 	public ResponseEntity<Integer> createPost(@RequestBody BoardDTO post) throws Exception {
-		System.out.println(post);
 		logger.debug("createPost - 호출");
-		createQR(post);
 		return new ResponseEntity<Integer>(boardService.createPost(post), HttpStatus.OK);
 	}
 

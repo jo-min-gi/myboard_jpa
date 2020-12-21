@@ -58,10 +58,10 @@ public class BoardController {
 	}
 
 	@ApiOperation(value = "하나의 게시글을 수정한다.", response = Integer.class)
-	@PutMapping("")
-	public ResponseEntity<Board> update(@RequestBody Board post) throws Exception {
+	@PutMapping("/{bid}")
+	public ResponseEntity<Board> update(@RequestBody Board post, @PathVariable Long bid) throws Exception {
 		logger.debug("modifyPost - 호출");
-		return new ResponseEntity<Board>(boardService.update(post, post.getBid()), HttpStatus.OK);
+		return new ResponseEntity<Board>(boardService.update(post, bid), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "하나의 게시글을 반환한다.", response = Board.class)

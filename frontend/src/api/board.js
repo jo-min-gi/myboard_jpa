@@ -18,7 +18,7 @@ function findByBid(bid, success, fail){
 
 function update(post, success, fail){
     instance
-        .put(`/api/board`, post)
+        .put(`/api/board/${post.bid}`, post)
         .then(success)
         .catch(fail)
 }

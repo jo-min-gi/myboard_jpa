@@ -20,15 +20,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.stereotype.Controller;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.ssafy.myboard.dto.BoardDTO;
+import com.ssafy.myboard.dto.Board;
 import com.ssafy.myboard.service.BoardService;
 
 import io.swagger.annotations.ApiOperation;
@@ -45,54 +43,54 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 
-	@ApiOperation(value = "모든 게시글을 반환한다 for jenkins2", response = List.class)
+	@ApiOperation(value = "모든 게시글을 반환한다.", response = List.class)
 	@GetMapping("")
-	public ResponseEntity<List<BoardDTO>> getAllPosts() throws Exception {
-		logger.debug("getAllPosts - 호출");
-		return new ResponseEntity<List<BoardDTO>>(boardService.getAllPosts(), HttpStatus.OK);
+	public ResponseEntity<List<Board>> findAll() throws Exception {
+		logger.debug("findAll - 호출");
+		return new ResponseEntity<List<Board>>(boardService.findAll(), HttpStatus.OK);
 	}
-	
-	
+
 	@ApiOperation(value = "하나의 게시글을 작성한다.", response = Integer.class)
 	@PostMapping("")
-	public ResponseEntity<Integer> createPost(@RequestBody BoardDTO post) throws Exception {
+	public ResponseEntity<Board> save(@RequestBody Board post) throws Exception {
 		logger.debug("createPost - 호출");
-		return new ResponseEntity<Integer>(boardService.createPost(post), HttpStatus.OK);
+		return new ResponseEntity<Board>(boardService.save(post), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "하나의 게시글을 수정한다.", response = Integer.class)
 	@PutMapping("")
-	public ResponseEntity<Integer> modifyPost(@RequestBody BoardDTO post) throws Exception {
+	public ResponseEntity<Board> update(@RequestBody Board post) throws Exception {
 		logger.debug("modifyPost - 호출");
-		return new ResponseEntity<Integer>(boardService.modifyPost(post), HttpStatus.OK);
+		return new ResponseEntity<Board>(boardService.update(post, post.getBid()), HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "하나의 게시글을 반환한다.", response = BoardDTO.class)
-	@GetMapping("/{id}")
-	public ResponseEntity<BoardDTO> getOnePost(@PathVariable int id) throws Exception {
-		logger.debug("getOnePost - 호출");
-		return new ResponseEntity<BoardDTO>(boardService.getOnePost(id), HttpStatus.OK);
+	@ApiOperation(value = "하나의 게시글을 반환한다.", response = Board.class)
+	@GetMapping("/{bid}")
+	public ResponseEntity<Board> findByBid(@PathVariable Long bid) throws Exception {
+		logger.debug("findByBid - 호출");
+		return new ResponseEntity<Board>(boardService.findByBid(bid), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "하나의 게시글을 삭제한다.", response = Integer.class)
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Integer> deleteOnePost(@PathVariable int id) throws Exception {
-		logger.debug("deleteOnePost - 호출");
-		return new ResponseEntity<Integer>(boardService.deleteOnePost(id), HttpStatus.OK);
+	@DeleteMapping("/{bid}")
+	public ResponseEntity<Integer> deleteByBid(@PathVariable Long bid) throws Exception {
+		logger.debug("deleteByBid - 호출");
+		boardService.deleteByBid(bid);
+		return new ResponseEntity<Integer>(HttpStatus.OK);
 	}
-	
-	public void createQR(BoardDTO post) throws Exception {
+
+	public void createQR(Board post) throws Exception {
 		System.out.println(post);
 		File path = new File("/myboard/qrcode/images/");
 		String fileName = UUID.randomUUID().toString().replace("-", "");
-		if(!path.exists()) path.mkdirs();
+		if (!path.exists())
+			path.mkdirs();
 
 		QRCodeWriter writer = new QRCodeWriter();
-		BitMatrix qrCode = writer.encode("http://localhost:8081/read?bid=6" + post.getBid(), BarcodeFormat.QR_CODE, 200, 200);
+		BitMatrix qrCode = writer.encode("http://localhost:8081/read?bid=6" + post.getBid(), BarcodeFormat.QR_CODE, 200,
+				200);
 		BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(qrCode);
-		ImageIO.write(qrImage, "PNG", new File(path, fileName+".png"));
+		ImageIO.write(qrImage, "PNG", new File(path, fileName + ".png"));
 	}
-	
-	
 
 }

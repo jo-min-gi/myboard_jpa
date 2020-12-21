@@ -11,54 +11,46 @@
 			</div>
 			<div class="mb-3">
 				<label>내용</label>
-				<textarea class="form-control" rows="5" v-model="post.content" readonly></textarea>
+				<textarea class="form-control" rows="5" v-model="post.contents" readonly></textarea>
 			</div>
 			<div >
                 <router-link class="btn btn-primary" to="/board">목록</router-link>
-				<button class="btn btn-primary" @click="modifyPost(post.id)">수정</button>
-				<button class="btn btn-primary" @click="deletePost(post.id)">삭제</button>
+				<button class="btn btn-primary" @click="modifyPost(post.bid)">수정</button>
+				<button class="btn btn-primary" @click="deletePost(post.bid)">삭제</button>
 			</div>
 		</div>
 </template>
 
 <script>
-import axios from 'axios'
+import { findByBid, deleteByBid } from "../api/board.js";
+
 export default {
    	name : 'Read',
-	methods : {
-	   modifyPost(id){
-		   this.$router.push('/update?id='+ id);
+	data () {
+		return{
+			post : {}
+		}
+	},
+	created() {
+		const bid = this.$route.params.bid;
+		findByBid(
+			bid,
+			response => { this.post = response.data; },
+			error => { console.log(error); }
+		)
+	},
+   	methods : {
+	   modifyPost(bid){
+		   this.$router.push({ name : 'Update', params : { 'bid': bid } });
 	   },
-	   deletePost(id){
-		   console.log(id);
-		   axios
-				.delete(`http://localhost:8080/myboard/api/board/${id}`)
-				.then((response)=>{
-					console.log(response);
-					this.$router.push('/board');
-				})
-				.catch((error)=>{
-					console.log(error);
-				})
+	   deletePost(bid){
+		   	deleteByBid(
+				bid, 
+				() => { this.$router.push('/board'); },
+				error => { console.log(error); }
+			)
 	   }
   	},
-   data () {
-	   return{
-		   post : {}
-	   }
-   },
-   created() {
-	   const params = new URL(document.location).searchParams;
-	   axios
-			.get(`http://localhost:8080/myboard/api/board/${params.get('id')}`)
-			.then((response)=>{
-				console.log(response);
-				this.post = response.data;
-			})
-			.catch((error)=>{
-				console.log(error);
-			})
-   },
 
 }
 </script>

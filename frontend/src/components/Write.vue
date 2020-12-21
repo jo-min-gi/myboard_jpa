@@ -11,7 +11,7 @@
             </div>
             <div class="mb-3">
                 <label>내용</label>
-                <textarea class="form-control" rows="5" v-model="content" placeholder="내용을 입력해 주세요" ></textarea>
+                <textarea class="form-control" rows="5" v-model="contents" placeholder="내용을 입력해 주세요" ></textarea>
             </div>
 			<div >
 				<button type="button" class="btn btn-primary" @click="writePost">작성</button>
@@ -21,14 +21,15 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { save } from "../api/board.js";
+
 export default {
     name : 'Write',
     data () {
         return {
             title : '',
             writer : '',
-            content : '',
+            contents : '',
         }
     },
     methods : {
@@ -36,21 +37,12 @@ export default {
             const post = {
                 title : this.title,
                 writer : this.writer,
-                content : this.content
+                contents : this.contents
             };
-            console.log(post);
-            axios
-                .post('http://localhost:8080/myboard/api/board',
-                        post,
-                        { headers: { 'Access-Control-Allow-Origin': '*' } }
-                        )
-                .then((response) => {
-                    console.log(response);
-                    this.$router.push('/board');
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
+            save(post,
+                () => { this.$router.push('/board'); },
+                error => { console.log(error) }
+            )
         }
     }
 }

@@ -3,18 +3,18 @@ package com.ssafy.myboard.service;
 import java.util.List;
 
 
-import com.ssafy.myboard.dto.BoardDTO;
+import com.ssafy.myboard.dto.Board;
 
 public interface BoardService {
 
-	List<BoardDTO> getAllPosts();
+	List<Board> findAll();
 
-	BoardDTO getOnePost(int id);
-
-	int deleteOnePost(int id);
-
-	int createPost(BoardDTO post);
-
-	int modifyPost(BoardDTO post);
+	Board findByBid(Long bid);
+	
+	Board save(Board board);
+	
+	Board update(Board board, Long bid);
+	
+	void deleteByBid(Long bid);
 
 }

@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ssafy</groupId>
-	<artifactId>HappyHouseApi</artifactId>
+	<artifactId>MyBoardAPI</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>HappyHouseApi</name>
-	<description>HappyHouse</description>
+	<name>MyBoardAPI</name>
+	<description>MyBoard</description>
 
 	<properties>
 		<java.version>1.8</java.version>

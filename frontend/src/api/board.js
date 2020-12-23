@@ -2,9 +2,9 @@ import { createInstance } from "./index.js";
 
 const instance = createInstance();
 
-function findAll(succcess, fail){
+function findAll(page, size, succcess, fail){
     instance
-        .get('/api/board')
+        .get(`/api/board?page=${page}&size=${size}`)
         .then(succcess)
         .catch(fail)   
 }

@@ -31,4 +31,5 @@ public class Board {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		this.createdAt = format.format(new Date());
 	}
+	
 }

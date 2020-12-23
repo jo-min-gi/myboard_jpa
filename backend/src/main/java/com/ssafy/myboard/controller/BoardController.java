@@ -2,7 +2,9 @@ package com.ssafy.myboard.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -10,6 +12,9 @@ import javax.imageio.ImageIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.zxing.BarcodeFormat;
@@ -43,11 +49,31 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 
-	@ApiOperation(value = "모든 게시글을 반환한다.", response = List.class)
+//
+//	@ApiOperation(value = "모든 게시글을 반환한다.", response = List.class)
+//	@GetMapping("")
+//	public ResponseEntity<List<Board>> findAll() throws Exception {
+//		logger.debug("findAll - 호출");
+//		return new ResponseEntity<List<Board>>(boardService.findAll(), HttpStatus.OK);
+//	}
+//	
+	@ApiOperation(value = "한 페이지의 게시글을 반환한다.", response = List.class)
 	@GetMapping("")
-	public ResponseEntity<List<Board>> findAll() throws Exception {
+	public ResponseEntity<Map<Object, Object>> findAll(Pageable pageable) throws Exception {
 		logger.debug("findAll - 호출");
-		return new ResponseEntity<List<Board>>(boardService.findAll(), HttpStatus.OK);
+		System.out.println(pageable);
+		int offset = 10;
+		Page<Board> boards = boardService.findAll(pageable);
+		
+		int startPage = Math.max(0, boards.getPageable().getPageNumber());
+		int endPage = Math.min(boards.getTotalPages(), startPage + 10);
+		
+		System.out.println("[" + startPage + ":" + endPage + "]" + boards);
+		Map<Object, Object> response = new HashMap<>();
+		response.put("data", boards);
+		response.put("startPage", startPage);
+		response.put("endPage", endPage);
+		return new ResponseEntity<Map<Object, Object>>(response, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "하나의 게시글을 작성한다.", response = Integer.class)

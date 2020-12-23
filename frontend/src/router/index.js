@@ -24,7 +24,7 @@ const routes = [
     component : Write
   },
   {
-    path : '/read',
+    path : '/board/:bid',
     name : 'Read',
     component : Read
   },

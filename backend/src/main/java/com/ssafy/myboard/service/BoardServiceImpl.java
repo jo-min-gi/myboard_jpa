@@ -3,7 +3,11 @@ package com.ssafy.myboard.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.myboard.dto.Board;
@@ -17,7 +21,14 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public List<Board> findAll() {
-		return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "bid"));
+		List<Board> boards = boardRepository.findAll(Sort.by(Direction.DESC, "bid"));
+		return boards;
+	}
+	
+	@Override
+	public Page<Board> findAll(Pageable pageable) {
+		Page<Board> boards = boardRepository.findAll(pageable);
+		return boards;
 	}
 
 	@Override
